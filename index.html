@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Fixed for Failure</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.typekit.net/djz0rfh.css">
+    <link rel="shortcut icon" type="image/png" href="https://www.postandcourier.com/favicon.ico"/>
+
+</head>
+<body>
+
+
+
+<style>
+
+    body { margin: 0; padding: 0; }
+
+    #map {
+        position: fixed;
+        height: 100vh;
+        width: 100%;
+    }
+    #features {
+        font-family: adelle-sans, sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.06rem;
+        overflow-y: hidden;
+        background-color: #fafafa;
+    }
+
+    #title-card, #footer {
+        width: 465px;
+    }
+
+    #hammer {
+        font-size: 4em;
+        text-decoration: underline;
+        text-transform: uppercase;
+        margin: 0 0 .2em 0;
+    }
+
+    #title {
+        font-size: 1.5em;
+        margin: 0;
+    }
+
+    #directions {
+        font-size: 1em;
+        margin-top: 1em;
+    }
+
+    #title, #hammer, .section-header {
+        line-height: 1.1em;
+    }
+    section {
+        top: 0;
+        width: 20%;
+        margin-left: 10%;
+        margin-bottom: 50vh;
+        opacity: 0.25;
+        font-size: 1.5em;
+        color: #262b28;
+    }
+    section.active {
+        opacity: .99;
+    }
+
+    section:first-child {
+        margin-top: 30vh;
+    }
+
+    section:last-child {
+        border-bottom: none;
+        margin-bottom: 40vh;
+    }
+
+    a {
+        color: #1caecc;
+        text-decoration: none;
+    }
+    .section-header {
+        font-size: 2em;
+
+        margin-bottom: 16px;
+        text-transform: uppercase;
+    }
+
+    .section-body p {
+        margin: 0 0 .5em 0;
+    }
+
+    .annot_red {
+        background-color: #f15062;
+        color: #f3f4f2;
+        padding: 2px 5px;
+    }
+
+    .annot_white {
+        background-color: #1caecc;
+        color: #f3f4f2;
+        padding: 0 5px;
+    }
+
+    .caption {
+        font-size: .7em;
+        margin: 0;
+    }
+
+
+    @media only screen and (min-width: 2000px) {
+        body {
+            font-size: 18px;
+        }
+
+
+        #title-card, #footer {
+            width: 800px;
+        }
+
+        section {
+            width: 500px;
+            margin-left: 15%;
+        }
+
+        section:last-child {
+            border-bottom: none;
+            margin-bottom: 50vh;
+        }
+    }
+
+    @media only screen and (max-width: 1500px) {
+        body {
+            font-size: 10px;
+        }
+
+        section {
+            width: 250px;
+        }
+
+    }
+
+    @media only screen and (max-width: 1200px) {
+        body {
+            font-size: 8px;
+        }
+
+        section:first-child {
+            margin-top: 36vh;
+        }
+
+        section:last-child {
+            margin-bottom: 30vh;
+        }
+
+
+
+    }
+
+    @media only screen and (max-width: 750px) {
+
+        body {
+            font-size:  11px;
+            line-height: 1.7em;
+        }
+
+        #title-card > #title > p{
+            margin: .7em 0 .7em 0 ;
+        }
+
+        #title {
+            font-size: .9em;
+        }
+
+
+        .section-header {
+            font-size: 1em;
+            margin: 0 0 .5em 0;
+        }
+
+        #title-card, #footer {
+            width: 80%;
+        }
+
+        #hammer {
+            font-size: 2.1em;
+        }
+
+        .caption {
+            margin: 1em 0 0 0 ;
+        }
+
+        section {
+            width: 230px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 100vh;
+            background: rgba(243,244,242, .65);
+            padding: 10px;
+        }
+
+        section:last-child {
+            margin-bottom: 25vh;
+        }
+
+        .annot_red {
+            background-color: #f15062;
+            color: #f3f4f2;
+            padding: 1px 2px 2px 2px;
+        }
+
+    }
+
+    @media only screen and (max-width: 350px) {
+        #title-card {
+            font-size: 1.2em;
+        }
+
+        section:first-child {
+            margin-top: 18vh;
+        }
+        section:last-child {
+            margin-bottom: 7vh;
+        }
+    }
+
+    @media only screen and (min-device-width: 320px) and (max-device-width: 568px)
+    and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71)
+    {
+        section:first-child {
+            margin-top: 36vh;
+        }
+
+        section:last-child {
+            margin-bottom: 25vh;
+        }
+    }
+
+
+</style>
+
+<div id="map"></div>
+
+<div id="features">
+    <section id="title-card" class="active">
+        <h3 id="hammer">Fixed for failure</h3>
+        <h5 id="title"> <p>Flooding, the country’s most costly disaster, touches every state, from the coast to mountains.</p>
+            <p>The National Flood Insurance Program helps survivors rebuild — but it’s also deep in debt</p></h5>
+        <h5 id="directions"><span class="annot_red">Scroll</span> to continue</h5>
+    </section>
+    <section id="chapter1">
+        <h3 class="section-header">A program in trouble</h3>
+        <div class="section-body">
+            <p>
+                The National Flood Insurance Program has paid out nearly 2.5 million flood insurance claims since its inception in 1968, or nearly $70 billion.
+            </p>
+            <p>
+                But extreme events like Hurricanes Katrina and Harvey have pushed the safety net to its breaking point and saddled the program with over $20.5 billion in debt.
+            </p>
+        </div>
+        <h6 class="caption">
+            Each <span class="annot_red">red ring</span> represents the number of flood claims filed within an approximate area to maintain anonymity.
+        </h6>
+    </section>
+    <section id="chapter2">
+        <h3 class="section-header">Palmetto State payouts</h3>
+        <div class="section-body">
+            <p>
+                South Carolina has received the tenth highest total payout of any state and generated over 45,000 flood claims dating back to 1975.
+            </p>
+            <p>
+                Although the most money was paid out along the coast — Charleston, Horry, and Georgetown counties claimed three quarters of the state's total $920 million — homeowners living farther inland have seen their share of flood damages too.            </p>
+        </div>
+    </section>
+    <section id="chapter3">
+        <h3 class="section-header">More frequent flooding</h3>
+        <div class="section-body">
+            <p>
+                Over one third of all South Carolina flood insurance claims were filed in the last five years.
+            </p>
+            <p>
+                These claims total over $480 million, which is one third of all money paid out, with inflation, since 1975.
+            </p>
+        </div>
+        <h6 class="caption">Each <span class="annot_white">white circle</span> represents the number of flood claims filed between 2015 and 2020.</h6>
+    </section>
+    <section id="chapter4">
+        <h3 class="section-header">Homes at repeated risk</h3>
+        <div class="section-body">
+            <p>
+                With typically secret data, the Post and Courier matched some of these flood claims with street addresses, identifying about one-third of South Carolina’s most vulnerable properties.
+            </p>
+            <p>
+                National insurance leaves these homeowners with little choice but to rebuild and wait for the next flood.
+            </p>
+        </div>
+    </section>
+    <section id="chapter5">
+            <h3 class="section-header">On the Battery</h3>
+        <div class="section-body">
+            <p>
+                This property, in the high-dollar southwest portion of downtown Charleston, also sits on some of the city’s lowest and most vulnerable land. Estimated at $8.2 million in value, its owners made three flood claims between 1989 and 2017.</p>
+            <p>
+                In all, it’s reaped $379,000 in flood damages, including receiving the maximum amount allowed in its policy in 2017.
+            </p>
+        </div>
+    </section>
+    <section id="chapter6">
+        <h3 class="section-header">Cycle of disaster</h3>
+        <div class="section-body">
+            <p>
+                Some homeowners have been paid far less, but flood even more frequently. This home, in a West Ashley neighborhood with persistent drainage issues, filed nine claims totalling $40,000 between 1989 and 2008. It’s no longer insured.
+            </p>
+        </div>
+    </section>
+    <section id="chapter7">
+        <h3 class="section-header">Living on the edge</h3>
+        <div class="section-body">
+            <p>
+                Some properties have been paid close to their value in damages. This house backing up to the upper Ashley River has been paid 60 percent of its estimated value of $759,000.
+            </p>
+        </div>
+    </section>
+    <section id="chapter8">
+        <h3 class="section-header">Flooding farther inland</h3>
+        <div class="section-body">
+            <p>
+                Even in places near wetlands, flooding can strike repeatedly. This property in Hanahan has had eight flood claims between 1989 and 2017, including twice in that last year.
+            </p>
+        </div>
+    </section>
+    <section id="chapter9">
+        <h3 class="section-header">Vulnerable and without coverage</h3>
+        <div class="section-body">
+           <p>This house along the Intracoastal Waterway flooded eight times by 2001. The waterway’s stretch near Myrtle Beach can overflow when nearby rivers back up with floodwaters.</p>
+
+            <p>This property’s policy was dropped some time later, but it has continued to flood. </p>
+        </div>
+    </section>
+    <section id="chapter10">
+        <h3 class="section-header" id="footer">A <a href="https://www.postandcourier.com/rising-waters/">Rising Waters</a> project</h3>
+        <div class="section-body">
+            <small id="citation">
+                <p>Data and visuals by Bryan Brussee</p>
+                <p>Reporting by Chloe Johnson and Stephen Hobbs</p>
+                <p><a target="_blank" href="https://www.postandcourier.com/rising-waters/how-we-reported-fixed-for-failure/article_6d368eb4-93bc-11ea-b368-d73ece46da86.html">How we reported Fixed for Failure</a></p>
+                <p>© 2020, Post and Courier, an Evening Post Industries company. All rights reserved.</p>
+            </small>
+        </div>
+
+
+    </section>
+</div>
+
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoicG9zdGFuZGNvdXJpZXIiLCJhIjoiLTJtdV9XQSJ9.jbQWsbAO9LktxtEBDHcl3Q';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/postandcourier/ck76ltkz033yu1ip9c9t0d3fo',
+        bounds :[[-126.89073, 23.40331], [-65.21995, 50.25858]],
+        interactive: false
+    });
+
+    var chapters = {
+        'title-card': {
+            bounds: [[-126.89073, 23.40331], [-65.21995, 50.25858]],
+            visible: [],
+            invisible: []
+        },
+        'chapter1': {
+            bounds: [[-126.89073, 23.40331], [-65.21995, 50.25858]],
+            visible: ['flood-claims-national'],
+            invisible: ['all-sc-floods-v2', 'south-carolina-outline']
+        },
+        'chapter2': {
+            bounds: [[-83.46438, 31.75218], [-78.21505, 35.28621]],
+            visible: ['all-sc-floods-v2', 'south-carolina-outline'],
+            invisible: ['flood-claims-national','flood-claims-2015-2019']
+        },
+        'chapter3': {
+            bounds: [[-83.46438, 31.75218], [-78.21505, 35.28621]],
+            visible: ['flood-claims-2015-2019', 'all-sc-floods-v2'],
+            invisible: ['fema-addresses-single-fam']
+        },
+        'chapter4': {
+            bounds: [[-83.46438, 31.75218], [-78.21505, 35.28621]],
+            visible: ['fema-addresses-single-fam','south-carolina-outline'],
+            invisible: ['flood-claims-2015-2019', 'all-sc-floods-v2','property-1']
+        },
+        'chapter5': {
+            bounds: [[-79.96161, 32.71256], [-79.90877, 32.82600]],
+            visible: ['property-1'],
+            invisible: ['property-2', 'fema-addresses-single-fam','south-carolina-outline']
+        },
+        'chapter6': {
+            bounds: [[-80.02977, 32.73571], [-79.97534, 32.85254]],
+            visible: ['property-2'],
+            invisible: ['property-1','property-3']
+        },
+        'chapter7': {
+            bounds: [[-80.16557, 32.86274], [-80.11178, 32.97803]],
+            visible: ['property-3'],
+            invisible: ['property-2','property-4']
+        },
+        'chapter8': {
+            bounds: [[-80.03762, 32.85342], [-79.98553, 32.96509]],
+            visible: ['property-4'],
+            invisible: ['property-3','property-5']
+        },
+        'chapter9': {
+            bounds: [[-79.03822, 33.62528], [-78.98412, 33.74023]],
+            visible: ['property-5'],
+            invisible: ['property-4', 'flood-claims-national']
+        },
+        'chapter10': {
+            bounds: [[-126.89073, 23.40331], [-65.21995, 50.25858]],
+            visible: ['flood-claims-national'],
+            invisible: ['property-5']
+        }
+    };
+
+    // On every scroll event, check which element is on screen
+    window.onscroll = function() {
+        var chapterNames = Object.keys(chapters);
+        for (var i = 0; i < chapterNames.length; i++) {
+            var chapterName = chapterNames[i];
+            if (isElementOnScreen(chapterName)) {
+                setActiveChapter(chapterName);
+                break;
+            }
+        }
+    };
+
+    function addLayers(layers) {
+        if (layers.length > 0) {
+            for (i = 0; i < layers.length; i++) {
+                let thisLayer = map.getLayer(layers[i]);
+                if (thisLayer.type === "circle") {
+                    map.setPaintProperty(thisLayer.id, 'circle-stroke-opacity', 1);
+                    map.setPaintProperty(thisLayer.id, 'circle-opacity', 1);
+                } else {
+                    map.setPaintProperty(thisLayer.id, 'line-opacity', 1)
+                }
+            }
+        }
+    }
+
+    function removeLayers(layers) {
+        if(layers.length > 0) {
+            for (i = 0; i < layers.length; i++) {
+                let thisLayer = map.getLayer(layers[i]);
+                if (thisLayer.type === "circle") {
+                    map.setPaintProperty(thisLayer.id, 'circle-opacity', 0);
+                    map.setPaintProperty(thisLayer.id, 'circle-stroke-opacity', 0);
+                } else {
+                    map.setPaintProperty(thisLayer.id, 'line-opacity', 0)
+                }
+            }
+        }
+    }
+
+    function reframe(bb) {
+        if(bb.length > 0) {
+            map.fitBounds(bb, {duration: 3000, essential: true});
+        }
+    }
+
+    var activeChapterName = 'title-card';
+    function setActiveChapter(chapterName) {
+        if (chapterName === activeChapterName) return;
+
+        reframe(chapters[chapterName].bounds);
+        addLayers(chapters[chapterName].visible);
+        removeLayers(chapters[chapterName].invisible);
+        document.getElementById(chapterName).setAttribute('class', 'active');
+
+        activeChapterName = chapterName;
+    }
+
+    function isElementOnScreen(id) {
+        var element = document.getElementById(id);
+        var bounds = element.getBoundingClientRect();
+        return bounds.top < window.innerHeight && bounds.bottom > 0;
+    }
+
+    window.onbeforeunload = function () {
+        window.scrollTo(0, 0);
+    }
+
+</script>
+
+</body>
+</html>
